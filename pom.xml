@@ -14,7 +14,7 @@
     <name>TP-4.2-2_Server</name>
     <description>TP-4.2-2_Server</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
