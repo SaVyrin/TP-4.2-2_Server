@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PersonAuthDto {
-    final private String login;
-    final private String password;
+    private final String login;
+    private final String password;
 }
