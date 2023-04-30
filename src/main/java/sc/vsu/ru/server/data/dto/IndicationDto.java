@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Date;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
 public class IndicationDto {
-    final private UUID ipuId;
-    final private String type;
-    final private int value;
-    final private Date date;
+    private final Integer ipuId;
+    private final String type;
+    private final int value;
+    private final Date date;
 }

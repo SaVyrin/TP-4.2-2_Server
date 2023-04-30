@@ -2,12 +2,11 @@ package sc.vsu.ru.server.data.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class IndicationCreateDto {
-    private final Integer ipuId;
-    private final int value;
+public class PersonGetDto {
+    private Integer personalAccount;
 }

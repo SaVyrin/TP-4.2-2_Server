@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PaymentDto {
-    final private String type;
-    final private int value;
+    private final String type;
+    private final int value;
 }

@@ -8,8 +8,4 @@ public class IndicationWrapper {
     public List<IndicationCreateDto> getIndications() {
         return indications;
     }
-
-    public void setIndications(List<IndicationCreateDto> indications) {
-        this.indications = indications;
-    }
 }
