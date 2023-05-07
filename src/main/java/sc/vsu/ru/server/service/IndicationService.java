@@ -52,7 +52,12 @@ public class IndicationService {
                 }
                 IndicationEntity previousIndication = indicationStorage.findLastIndication(ipu.get());
                 int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
-                indicationStorage.save(new IndicationEntity(null, ipu.get(), indicationDto.getValue(), null, payment, false));
+                IndicationEntity indication = new IndicationEntity();
+                indication.setIpu(ipu.get());
+                indication.setValue(indicationDto.getValue());
+                indication.setPaymentValue(payment);
+                indication.setPaid(false);
+                indicationStorage.save(indication);
             }
         }
     }

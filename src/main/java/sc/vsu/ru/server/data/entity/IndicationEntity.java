@@ -1,17 +1,15 @@
 package sc.vsu.ru.server.data.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Getter
+@Setter
 @Table(name = "Indication")
 public class IndicationEntity {
     @Id
