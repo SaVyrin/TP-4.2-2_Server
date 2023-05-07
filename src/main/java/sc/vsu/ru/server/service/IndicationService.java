@@ -33,7 +33,7 @@ public class IndicationService {
         for (IpuEntity ipu : ipus) {
             IndicationEntity indication = indicationStorage.findLastIndication(ipu);
             if (indication != null)
-                indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate()));
+                indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate().toString()));
         }
         return indications;
     }
