@@ -23,6 +23,7 @@ public class PaymentService {
     @Autowired
     private PersonStorage personStorage;
 
+    @Transactional
     public List<PaymentDto> getPayments(Integer personalAccount) {
         List<PaymentDto> payments = new ArrayList<>();
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
@@ -34,6 +35,7 @@ public class PaymentService {
         return payments;
     }
 
+    @Transactional
     public int getExpectedPayment(Integer personalAccount) {
         int expectedPayment = 0;
         int numberOfPayments = 0;
@@ -56,6 +58,7 @@ public class PaymentService {
         }
     }
 
+    @Transactional
     private List<IpuEntity> getIpusByPerson(Integer personalAccount){
         PersonEntity person = personStorage.findByPersonalAccount(personalAccount);
         return ipuStorage.findByPerson(person);

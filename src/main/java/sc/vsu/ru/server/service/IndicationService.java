@@ -48,10 +48,11 @@ public class IndicationService {
                 switch (ipu.get().getType()) {
                     case "Горячая вода" -> tariff = 100;
                     case "Холодная вода" -> tariff = 75;
-                    case "Электричество" -> tariff = 20;
+                    case "Электроэнергия" -> tariff = 20;
                 }
                 IndicationEntity previousIndication = indicationStorage.findLastIndication(ipu.get());
                 int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
+
                 IndicationEntity indication = new IndicationEntity();
                 indication.setIpu(ipu.get());
                 indication.setValue(indicationDto.getValue());
