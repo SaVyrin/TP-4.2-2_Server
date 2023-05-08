@@ -3,10 +3,7 @@ package sc.vsu.ru.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sc.vsu.ru.server.data.dto.IndicationCreateDto;
 import sc.vsu.ru.server.data.dto.IndicationDto;
 import sc.vsu.ru.server.data.dto.IndicationWrapper;
@@ -21,7 +18,8 @@ import java.util.List;
 public class IndicationController {
     @Autowired
     private IndicationService indicationService;
-    @PostMapping("/current")
+
+    @GetMapping("/current")
     public ResponseEntity<List<IndicationDto>> getCurrentIndications(@RequestBody PersonGetDto personGetDto){
         return new ResponseEntity<>(indicationService.getCurrentIndications(personGetDto.getPersonalAccount()), HttpStatus.OK);
     }
