@@ -43,8 +43,10 @@ public class PaymentService {
         for (IpuEntity ipu : ipus){
             List<IndicationEntity> indications = indicationStorage.findLast5Indication(ipu);
             for (IndicationEntity indication : indications){
-                expectedPayment += indication.getPaymentValue();
-                numberOfPayments++;
+                if (indication.getPaymentValue() != 0) {
+                    expectedPayment += indication.getPaymentValue();
+                    numberOfPayments++;
+                }
             }
         }
         return expectedPayment/numberOfPayments;
