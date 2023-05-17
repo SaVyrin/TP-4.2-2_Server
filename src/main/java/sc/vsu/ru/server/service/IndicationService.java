@@ -33,7 +33,7 @@ public class IndicationService {
         for (IpuEntity ipu : ipus) {
             IndicationEntity indication = indicationStorage.findLastIndication(ipu);
             if (indication != null)
-                indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate()));
+                indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate().toString()));
         }
         return indications;
     }
@@ -48,11 +48,17 @@ public class IndicationService {
                 switch (ipu.get().getType()) {
                     case "Горячая вода" -> tariff = 100;
                     case "Холодная вода" -> tariff = 75;
-                    case "Электричество" -> tariff = 20;
+                    case "Электроэнергия" -> tariff = 20;
                 }
                 IndicationEntity previousIndication = indicationStorage.findLastIndication(ipu.get());
                 int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
-                indicationStorage.save(new IndicationEntity(null, ipu.get(), indicationDto.getValue(), null, payment, false));
+
+                IndicationEntity indication = new IndicationEntity();
+                indication.setIpu(ipu.get());
+                indication.setValue(indicationDto.getValue());
+                indication.setPaymentValue(payment);
+                indication.setPaid(false);
+                indicationStorage.save(indication);
             }
         }
     }
