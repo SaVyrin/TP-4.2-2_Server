@@ -28,9 +28,8 @@ public class PaymentService {
         List<PaymentDto> payments = new ArrayList<>();
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
         for (IpuEntity ipu : ipus){
-            IndicationEntity indication = indicationStorage.findLastUnpaidIndication(ipu);
-            if (indication != null)
-                payments.add(new PaymentDto(ipu.getType(), indication.getPaymentValue()));
+            int paymentValue = indicationStorage.getSumOfAllUnpaidIndications(ipu);
+            payments.add(new PaymentDto(ipu.getType(), paymentValue));
         }
         return payments;
     }
