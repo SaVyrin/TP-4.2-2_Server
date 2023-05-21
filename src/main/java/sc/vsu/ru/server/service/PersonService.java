@@ -1,6 +1,6 @@
 package sc.vsu.ru.server.service;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.PersonAuthDto;
@@ -16,7 +16,7 @@ public class PersonService {
 
     @Transactional
     public PersonDto authorization(PersonAuthDto personAuthDto) {
-        PersonEntity person = personStorage.findByPersonalAccountAndPassword(personAuthDto.getLogin(), personAuthDto.getPassword());
+        PersonEntity person = personStorage.findByPersonalAccountAndPassword(Integer.parseInt(personAuthDto.getLogin()), personAuthDto.getPassword());
         if (person != null)
             return new PersonDto(person.getPersonalAccount(), person.getName(), person.getSurname(), person.getAddress());
         else

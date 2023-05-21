@@ -1,6 +1,6 @@
 package sc.vsu.ru.server.service;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.IndicationCreateDto;
@@ -31,7 +31,7 @@ public class IndicationService {
         List<IndicationDto> indications = new ArrayList<>();
 
         for (IpuEntity ipu : ipus) {
-            IndicationEntity indication = indicationStorage.findLastIndication(ipu);
+            IndicationEntity indication = indicationStorage.findTopByIpuOrderByDateDesc(ipu);
             if (indication != null)
                 indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate().toString()));
         }
@@ -45,12 +45,14 @@ public class IndicationService {
             Optional<IpuEntity> ipu = ipuStorage.findById(indicationDto.getIpuId());
 
             if (ipu.isPresent()) {
-                switch (ipu.get().getType()) {
-                    case "Горячая вода" -> tariff = 100;
-                    case "Холодная вода" -> tariff = 75;
-                    case "Электроэнергия" -> tariff = 20;
-                }
-                IndicationEntity previousIndication = indicationStorage.findLastIndication(ipu.get());
+                String type = ipu.get().getType();
+                if (type.equals("Горячая вода"))
+                    tariff = 100;
+                if (type.equals("Холодная вода"))
+                    tariff = 75;
+                if (type.equals("Электроэнергия"))
+                    tariff = 20;
+                IndicationEntity previousIndication = indicationStorage.findTopByIpuOrderByDateDesc(ipu.get());
                 int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
 
                 IndicationEntity indication = new IndicationEntity();
