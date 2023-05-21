@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import sc.vsu.ru.server.data.dto.IndicationCreateDto;
 import sc.vsu.ru.server.data.dto.IndicationDto;
 import sc.vsu.ru.server.data.dto.IndicationWrapper;
-import sc.vsu.ru.server.data.dto.PersonGetDto;
 import sc.vsu.ru.server.service.IndicationService;
 
 import java.util.ArrayList;
@@ -20,8 +19,8 @@ public class IndicationController {
     private IndicationService indicationService;
 
     @GetMapping("/current")
-    public ResponseEntity<List<IndicationDto>> getCurrentIndications(@RequestBody PersonGetDto personGetDto){
-        return new ResponseEntity<>(indicationService.getCurrentIndications(personGetDto.getPersonalAccount()), HttpStatus.OK);
+    public ResponseEntity<List<IndicationDto>> getCurrentIndications(@RequestParam("personalAccount") Integer personalAccount){
+        return new ResponseEntity<>(indicationService.getCurrentIndications(personalAccount), HttpStatus.OK);
     }
 
     @PostMapping("/send")

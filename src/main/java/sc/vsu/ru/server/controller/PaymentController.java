@@ -16,13 +16,13 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
     @GetMapping("/payments")
-    public ResponseEntity<List<PaymentDto>> getPayments(@RequestBody PersonGetDto personGetDto){
-        return new ResponseEntity<>(paymentService.getPayments(personGetDto.getPersonalAccount()), HttpStatus.OK);
+    public ResponseEntity<List<PaymentDto>> getPayments(@RequestParam("personalAccount") Integer personalAccount){
+        return new ResponseEntity<>(paymentService.getPayments(personalAccount), HttpStatus.OK);
     }
 
     @GetMapping("/expected")
-    public ResponseEntity<Integer> getExpectedPayment(@RequestBody PersonGetDto personGetDto){
-        return new ResponseEntity<>(paymentService.getExpectedPayment(personGetDto.getPersonalAccount()), HttpStatus.OK);
+    public ResponseEntity<Integer> getExpectedPayment(@RequestParam("personalAccount") Integer personalAccount){
+        return new ResponseEntity<>(paymentService.getExpectedPayment(personalAccount), HttpStatus.OK);
     }
 
     @PostMapping("/pay")

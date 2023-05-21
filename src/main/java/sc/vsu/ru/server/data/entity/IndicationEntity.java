@@ -21,7 +21,7 @@ public class IndicationEntity {
     @Column(name = "value")
     private int value;
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
     private Date date;
     @Column(name = "payment_value")

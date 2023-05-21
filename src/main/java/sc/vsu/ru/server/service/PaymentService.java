@@ -13,6 +13,7 @@ import sc.vsu.ru.server.data.repository.PersonStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PaymentService {
@@ -28,9 +29,8 @@ public class PaymentService {
         List<PaymentDto> payments = new ArrayList<>();
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
         for (IpuEntity ipu : ipus){
-            IndicationEntity indication = indicationStorage.findLastUnpaidIndication(ipu);
-            if (indication != null)
-                payments.add(new PaymentDto(ipu.getType(), indication.getPaymentValue()));
+            Integer paymentValue = indicationStorage.getSumOfAllUnpaidIndications(ipu);
+            payments.add(new PaymentDto(ipu.getType(), Objects.requireNonNullElse(paymentValue, 0)));
         }
         return payments;
     }
