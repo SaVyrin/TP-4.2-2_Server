@@ -18,7 +18,7 @@ public interface IndicationStorage extends JpaRepository<IndicationEntity, Integ
     void setPaid(@Param("ipu") IpuEntity ipu);
 
     @Query("select SUM(indi.paymentValue) from IndicationEntity indi where indi.ipu = :ipu and indi.paid = false")
-    int getSumOfAllUnpaidIndications(@Param("ipu") IpuEntity ipu);
+    Integer getSumOfAllUnpaidIndications(@Param("ipu") IpuEntity ipu);
 
     @Query("select indi from IndicationEntity indi where indi.ipu = :ipu order by indi.date desc FETCH FIRST 1 ROW ONLY")
     IndicationEntity findLastIndication(@Param("ipu") IpuEntity ipu);
