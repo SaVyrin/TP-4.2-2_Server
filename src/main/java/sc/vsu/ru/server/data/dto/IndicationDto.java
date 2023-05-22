@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-@Schema(name = "IndicationDto", description = "DTO для показаний")
+@Schema(name = "IndicationResponse", description = "DTO для показаний")
 public class IndicationDto {
     @Schema(name = "ipuId", description = "id ИПУ", example = "1")
     private final Integer ipuId;

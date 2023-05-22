@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-@Schema(name = "PersonAuthDto", description = "DTO для авторизации пользователя")
+@Schema(name = "AuthRequest", description = "DTO для авторизации пользователя")
 public class PersonAuthDto {
     @Schema(name = "login", description = "Логин", example = "12345")
     private final String login;

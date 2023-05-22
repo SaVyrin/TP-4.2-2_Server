@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-@Schema(name = "PaymentDto", description = "DTO для платежа")
+@Schema(name = "PaymentResponse", description = "DTO для платежа")
 public class PaymentDto {
     @Schema(name = "type", description = "Тип ИПУ", example = "Горяча вода")
     private final String type;

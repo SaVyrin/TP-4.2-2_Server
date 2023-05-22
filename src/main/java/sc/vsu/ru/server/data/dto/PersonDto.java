@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-@Schema(name = "PersonDto", description = "DTO для пользователя")
+@Schema(name = "AuthResponse", description = "DTO для пользователя")
 public class PersonDto {
     @Schema(name = "personalAccount", description = "Лицевой счет", example = "12345")
     private final Integer personalAccount;
