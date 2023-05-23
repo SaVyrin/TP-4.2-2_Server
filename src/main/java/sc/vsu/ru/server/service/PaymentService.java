@@ -1,6 +1,6 @@
 package sc.vsu.ru.server.service;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.PaymentDto;
@@ -13,7 +13,6 @@ import sc.vsu.ru.server.data.repository.PersonStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PaymentService {
@@ -30,7 +29,10 @@ public class PaymentService {
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
         for (IpuEntity ipu : ipus){
             Integer paymentValue = indicationStorage.getSumOfAllUnpaidIndications(ipu);
-            payments.add(new PaymentDto(ipu.getType(), Objects.requireNonNullElse(paymentValue, 0)));
+            if (paymentValue == null)
+                payments.add(new PaymentDto(ipu.getType(), 0));
+            else
+                payments.add(new PaymentDto(ipu.getType(), paymentValue));
         }
         return payments;
     }
@@ -41,7 +43,7 @@ public class PaymentService {
         int numberOfPayments = 0;
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
         for (IpuEntity ipu : ipus){
-            List<IndicationEntity> indications = indicationStorage.findLast5Indication(ipu);
+            List<IndicationEntity> indications = indicationStorage.findTop5ByIpuOrderByDateDesc(ipu);
             for (IndicationEntity indication : indications){
                 if (indication.getPaymentValue() != 0) {
                     expectedPayment += indication.getPaymentValue();
@@ -60,7 +62,6 @@ public class PaymentService {
         }
     }
 
-    @Transactional
     private List<IpuEntity> getIpusByPerson(Integer personalAccount){
         PersonEntity person = personStorage.findByPersonalAccount(personalAccount);
         return ipuStorage.findByPerson(person);

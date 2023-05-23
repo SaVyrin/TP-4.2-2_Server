@@ -17,13 +17,12 @@ public interface IndicationStorage extends JpaRepository<IndicationEntity, Integ
     @Query("update IndicationEntity indi set indi.paid = true where indi.ipu = :ipu")
     void setPaid(@Param("ipu") IpuEntity ipu);
 
+    IndicationEntity findTopByIpuOrderByDateDesc(@Param("ipu") IpuEntity ipu);
+
+    List<IndicationEntity> findTop5ByIpuOrderByDateDesc(@Param("ipu") IpuEntity ipu);
+
     @Query("select SUM(indi.paymentValue) from IndicationEntity indi where indi.ipu = :ipu and indi.paid = false")
     Integer getSumOfAllUnpaidIndications(@Param("ipu") IpuEntity ipu);
 
-    @Query("select indi from IndicationEntity indi where indi.ipu = :ipu order by indi.date desc FETCH FIRST 1 ROW ONLY")
-    IndicationEntity findLastIndication(@Param("ipu") IpuEntity ipu);
-
-    @Query("select indi from IndicationEntity indi where indi.ipu = :ipu order by indi.date desc FETCH FIRST 5 ROW ONLY")
-    List<IndicationEntity> findLast5Indication(@Param("ipu") IpuEntity ipu);
 
 }
