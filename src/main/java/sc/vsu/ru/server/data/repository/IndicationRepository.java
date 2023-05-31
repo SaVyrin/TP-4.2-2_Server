@@ -11,7 +11,7 @@ import sc.vsu.ru.server.data.entity.IpuEntity;
 import java.util.*;
 
 @Repository
-public interface IndicationStorage extends JpaRepository<IndicationEntity, Integer> {
+public interface IndicationRepository extends JpaRepository<IndicationEntity, Integer> {
 
     @Modifying
     @Query("update IndicationEntity indi set indi.paid = true where indi.ipu = :ipu")
