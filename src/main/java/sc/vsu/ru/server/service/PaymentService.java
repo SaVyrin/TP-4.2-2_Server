@@ -1,34 +1,36 @@
 package sc.vsu.ru.server.service;
 
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.PaymentDto;
 import sc.vsu.ru.server.data.entity.IndicationEntity;
 import sc.vsu.ru.server.data.entity.IpuEntity;
 import sc.vsu.ru.server.data.entity.PersonEntity;
-import sc.vsu.ru.server.data.repository.IndicationStorage;
-import sc.vsu.ru.server.data.repository.IpuStorage;
-import sc.vsu.ru.server.data.repository.PersonStorage;
+import sc.vsu.ru.server.data.repository.IndicationRepository;
+import sc.vsu.ru.server.data.repository.IpuRepository;
+import sc.vsu.ru.server.data.repository.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PaymentService {
-    @Autowired
-    private IndicationStorage indicationStorage;
-    @Autowired
-    private IpuStorage ipuStorage;
-    @Autowired
-    private PersonStorage personStorage;
+    private IndicationRepository indicationRepository;
+    private IpuRepository ipuRepository;
+    private PersonRepository personRepository;
 
     @Transactional
     public List<PaymentDto> getPayments(Integer personalAccount) {
-        List<PaymentDto> payments = new ArrayList<>();
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
+
+        List<PaymentDto> payments = new ArrayList<>();
+
         for (IpuEntity ipu : ipus){
-            Integer paymentValue = indicationStorage.getSumOfAllUnpaidIndications(ipu);
+            Integer paymentValue = indicationRepository.getSumOfAllUnpaidIndications(ipu);
+
             if (paymentValue == null)
                 payments.add(new PaymentDto(ipu.getType(), 0));
             else
@@ -41,9 +43,12 @@ public class PaymentService {
     public int getExpectedPayment(Integer personalAccount) {
         int expectedPayment = 0;
         int numberOfPayments = 0;
+
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
+
         for (IpuEntity ipu : ipus){
-            List<IndicationEntity> indications = indicationStorage.findTop5ByIpuOrderByDateDesc(ipu);
+            List<IndicationEntity> indications = indicationRepository.findTop5ByIpuOrderByDateDesc(ipu);
+
             for (IndicationEntity indication : indications){
                 if (indication.getPaymentValue() != 0) {
                     expectedPayment += indication.getPaymentValue();
@@ -57,13 +62,14 @@ public class PaymentService {
     @Transactional
     public void pay(Integer personalAccount) {
         List<IpuEntity> ipus = getIpusByPerson(personalAccount);
+
         for (IpuEntity ipu : ipus){
-            indicationStorage.setPaid(ipu);
+            indicationRepository.setPaid(ipu);
         }
     }
 
     private List<IpuEntity> getIpusByPerson(Integer personalAccount){
-        PersonEntity person = personStorage.findByPersonalAccount(personalAccount);
-        return ipuStorage.findByPerson(person);
+        PersonEntity person = personRepository.findByPersonalAccount(personalAccount);
+        return ipuRepository.findByPerson(person);
     }
 }
