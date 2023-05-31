@@ -22,6 +22,6 @@ public class IpuEntity {
     private PersonEntity person;
     @Column(name = "type", length = 64)
     private String type;
-    @OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="ipu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<IndicationEntity> indications;
 }

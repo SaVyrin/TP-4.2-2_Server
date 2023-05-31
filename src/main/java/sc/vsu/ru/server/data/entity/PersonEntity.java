@@ -24,6 +24,6 @@ public class PersonEntity {
     private String surname;
     @Column(name = "address", length = 128)
     private String address;
-    @OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<IpuEntity> ipus;
 }
