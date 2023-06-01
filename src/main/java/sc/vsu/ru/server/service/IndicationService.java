@@ -1,37 +1,36 @@
 package sc.vsu.ru.server.service;
 
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.IndicationCreateDto;
 import sc.vsu.ru.server.data.dto.IndicationDto;
 import sc.vsu.ru.server.data.entity.IndicationEntity;
 import sc.vsu.ru.server.data.entity.IpuEntity;
 import sc.vsu.ru.server.data.entity.PersonEntity;
-import sc.vsu.ru.server.data.repository.IndicationStorage;
-import sc.vsu.ru.server.data.repository.IpuStorage;
-import sc.vsu.ru.server.data.repository.PersonStorage;
+import sc.vsu.ru.server.data.repository.IndicationRepository;
+import sc.vsu.ru.server.data.repository.IpuRepository;
+import sc.vsu.ru.server.data.repository.PersonRepository;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class IndicationService {
-    @Autowired
-    private PersonStorage personStorage;
-    @Autowired
-    private IndicationStorage indicationStorage;
-    @Autowired
-    private IpuStorage ipuStorage;
+    private PersonRepository personRepository;
+    private IndicationRepository indicationRepository;
+    private IpuRepository ipuRepository;
 
     @Transactional
     public List<IndicationDto> getCurrentIndications(Integer personalAccount) {
-        PersonEntity person = personStorage.findByPersonalAccount(personalAccount);
-        List<IpuEntity> ipus = ipuStorage.findByPerson(person);
+        PersonEntity person = personRepository.findByPersonalAccount(personalAccount);
+        List<IpuEntity> ipus = ipuRepository.findByPerson(person);
 
         List<IndicationDto> indications = new ArrayList<>();
 
         for (IpuEntity ipu : ipus) {
-            IndicationEntity indication = indicationStorage.findTopByIpuOrderByDateDesc(ipu);
+            IndicationEntity indication = indicationRepository.findTopByIpuOrderByDateDesc(ipu);
             if (indication != null)
                 indications.add(new IndicationDto(ipu.getId(), ipu.getType(), indication.getValue(), indication.getDate().toString()));
         }
@@ -42,27 +41,29 @@ public class IndicationService {
     public void addIndications(List<IndicationCreateDto> indications) {
         for (IndicationCreateDto indicationDto : indications) {
             int tariff = 50;
-            Optional<IpuEntity> ipu = ipuStorage.findById(indicationDto.getIpuId());
+            IpuEntity ipu = ipuRepository.findIpuEntityById(indicationDto.getIpuId());
+            String type = ipu.getType();
 
-            if (ipu.isPresent()) {
-                String type = ipu.get().getType();
-                if (type.equals("Горячая вода"))
+            switch (type) {
+                case "Горячая вода":
                     tariff = 100;
-                if (type.equals("Холодная вода"))
+                    break;
+                case "Холодная вода":
                     tariff = 75;
-                if (type.equals("Электроэнергия"))
+                    break;
+                case "Электроэнергия":
                     tariff = 20;
-                IndicationEntity previousIndication = indicationStorage.findTopByIpuOrderByDateDesc(ipu.get());
-                int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
-
-                IndicationEntity indication = new IndicationEntity();
-                indication.setIpu(ipu.get());
-                indication.setValue(indicationDto.getValue());
-                indication.setPaymentValue(payment);
-                indication.setPaid(false);
-                indicationStorage.save(indication);
+                    break;
             }
+            IndicationEntity previousIndication = indicationRepository.findTopByIpuOrderByDateDesc(ipu);
+            int payment = (indicationDto.getValue() - previousIndication.getValue()) * tariff;
+
+            IndicationEntity indication = new IndicationEntity();
+            indication.setIpu(ipu);
+            indication.setValue(indicationDto.getValue());
+            indication.setPaymentValue(payment);
+            indication.setPaid(false);
+            indicationRepository.save(indication);
         }
     }
-
 }

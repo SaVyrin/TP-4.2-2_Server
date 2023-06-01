@@ -1,24 +1,26 @@
 package sc.vsu.ru.server.service;
 
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sc.vsu.ru.server.data.dto.PersonAuthDto;
 import sc.vsu.ru.server.data.dto.PersonDto;
 import sc.vsu.ru.server.data.entity.PersonEntity;
-import sc.vsu.ru.server.data.repository.PersonStorage;
-
+import sc.vsu.ru.server.data.mapper.PersonMapper;
+import sc.vsu.ru.server.data.repository.PersonRepository;
 
 @Service
+@AllArgsConstructor
 public class PersonService {
-    @Autowired
-    private PersonStorage personStorage;
+    private PersonRepository personRepository;
+    private PersonMapper personMapper;
 
     @Transactional
     public PersonDto authorization(PersonAuthDto personAuthDto) {
-        PersonEntity person = personStorage.findByPersonalAccountAndPassword(Integer.parseInt(personAuthDto.getLogin()), personAuthDto.getPassword());
+        PersonEntity person = personRepository.findByPersonalAccountAndPassword(Integer.parseInt(personAuthDto.getLogin()), personAuthDto.getPassword());
         if (person != null)
-            return new PersonDto(person.getPersonalAccount(), person.getName(), person.getSurname(), person.getAddress());
+            return personMapper.toDto(person);
         else
             return null;
     }

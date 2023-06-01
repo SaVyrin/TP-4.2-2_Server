@@ -6,10 +6,9 @@ import sc.vsu.ru.server.data.entity.IpuEntity;
 import sc.vsu.ru.server.data.entity.PersonEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface IpuStorage extends JpaRepository<IpuEntity, Integer> {
+public interface IpuRepository extends JpaRepository<IpuEntity, Integer> {
     List<IpuEntity> findByPerson(PersonEntity person);
-    Optional<IpuEntity> findById(Integer id);
+    IpuEntity findIpuEntityById(Integer id);
 }
