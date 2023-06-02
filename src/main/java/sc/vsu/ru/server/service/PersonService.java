@@ -18,7 +18,7 @@ public class PersonService {
 
     @Transactional
     public PersonDto authorization(PersonAuthDto personAuthDto) {
-        PersonEntity person = personRepository.findByPersonalAccountAndPassword(Integer.parseInt(personAuthDto.getLogin()), personAuthDto.getPassword());
+        PersonEntity person = personRepository.findPerson(Integer.parseInt(personAuthDto.getLogin()), personAuthDto.getPassword());
         if (person != null)
             return personMapper.toDto(person);
         else
