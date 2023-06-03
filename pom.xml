@@ -62,6 +62,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>tp4_2-2_server</finalName>
     </build>
 
 </project>
